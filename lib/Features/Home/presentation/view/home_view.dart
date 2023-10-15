@@ -1,3 +1,4 @@
+import 'package:azkary/Features/Home/presentation/view/widgets/home_view_body.dart';
 import 'package:flutter/material.dart';
 
 class HomeView extends StatelessWidget {
@@ -5,7 +6,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text('azkar')), body: Container());
+    return Scaffold(body: HomeViewBody());
     //  ListView.builder(
     //     itemCount: azkarDataList.length,
     //     itemBuilder: (context, index) => Container(
