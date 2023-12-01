@@ -1,7 +1,9 @@
 import 'package:azkary/Features/Home/presentation/view/widgets/grid_tile.dart';
+import 'package:azkary/Features/Salah/presentation/view/salah_view.dart';
 import 'package:azkary/core/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomCardGridView extends StatelessWidget {
@@ -14,15 +16,20 @@ class CustomCardGridView extends StatelessWidget {
     return GridView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           crossAxisSpacing: 20,
-          maxCrossAxisExtent: 200,
-          mainAxisExtent: 120,
+          maxCrossAxisExtent: 200.w,
+          mainAxisExtent: 120.h,
           mainAxisSpacing: 20),
       children: [
-        const HomeTile(
-          title: 'الصلاة',
-          icon: FlutterIslamicIcons.solidKowtow,
+        GestureDetector(
+          onTap: () {
+            GoRouter.of(context).push(AppRouter.kSalahView);
+          },
+          child: const HomeTile(
+            title: 'الصلاة',
+            icon: FlutterIslamicIcons.solidKowtow,
+          ),
         ),
         GestureDetector(
           onTap: () {
@@ -33,21 +40,36 @@ class CustomCardGridView extends StatelessWidget {
             icon: FlutterIslamicIcons.solidPrayer,
           ),
         ),
-        HomeTile(
-          title: 'التسبيح',
-          icon: FlutterIslamicIcons.solidTasbihHand,
+        GestureDetector(
+          onTap: () {
+            GoRouter.of(context).push(AppRouter.kTasbeahView);
+          },
+          child: HomeTile(
+            title: 'التسبيح',
+            icon: FlutterIslamicIcons.solidTasbihHand,
+          ),
         ),
         HomeTile(
           title: "قيام الليل",
           icon: FlutterIslamicIcons.solidPrayingPerson,
         ),
-        HomeTile(
-          title: "الورد القرآني",
-          icon: FlutterIslamicIcons.solidQuran2,
+        GestureDetector(
+          onTap: () {
+            GoRouter.of(context).push(AppRouter.kQuranView);
+          },
+          child: HomeTile(
+            title: "الورد القرآني",
+            icon: FlutterIslamicIcons.solidQuran2,
+          ),
         ),
-        HomeTile(
-          title: " جوامع الكلم",
-          icon: FlutterIslamicIcons.solidMohammad,
+        GestureDetector(
+          onTap: () {
+            GoRouter.of(context).push(AppRouter.kDoaaView);
+          },
+          child: HomeTile(
+            title: " جوامع الكلم",
+            icon: FlutterIslamicIcons.solidMohammad,
+          ),
         ),
       ],
     );

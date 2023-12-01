@@ -1,5 +1,7 @@
+import 'package:azkary/core/utilises/app_colors.dart';
 import 'package:azkary/core/utilises/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeTile extends StatelessWidget {
   const HomeTile({super.key, required this.icon, required this.title});
@@ -19,13 +21,13 @@ class HomeTile extends StatelessWidget {
           ),
           Text(
             title,
-            style: Styles.textStyle22,
+            style: Styles.textStyle23White,
           )
         ],
       ),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: const Color.fromARGB(255, 208, 192, 186)),
+          borderRadius: BorderRadius.circular(15).w,
+          color: AppColors.KprimaryColor2),
     );
   }
 }
