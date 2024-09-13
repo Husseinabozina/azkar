@@ -28,7 +28,6 @@ class _HomeViewBodyState extends State<HomeViewBody> {
 
   @override
   void initState() {
-    // QuranCubit(getIt.get<QuranRepoImpl>()).fethAllSurahs();
     Dio dio = Dio();
 
     super.initState();
@@ -71,9 +70,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        onTap: () {
-                          print(data!.data["data"]["timings"]);
-                        },
+                        onTap: () {},
                         child: StatisCard(
                           title: "صفحات القرآن",
                           count: 458,
@@ -94,7 +91,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
             ),
           );
         } else {
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         }
       },
     );

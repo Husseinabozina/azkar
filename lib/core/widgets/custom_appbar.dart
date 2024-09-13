@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-class CustomViewAppBar extends StatelessWidget {
+class CustomViewAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomViewAppBar({super.key, required this.title});
   final String title;
 
@@ -27,4 +27,7 @@ class CustomViewAppBar extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  Size get preferredSize => Size.fromHeight(100.0.h);
 }

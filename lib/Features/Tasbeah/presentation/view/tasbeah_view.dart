@@ -6,6 +6,6 @@ class TasbeahView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: const TasbeahViewBody());
+    return const Scaffold(body: TasbeahViewBody());
   }
 }

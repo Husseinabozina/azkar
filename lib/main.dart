@@ -1,7 +1,9 @@
 import 'package:azkary/Features/quran/data/repos/quran_repo_imple.dart';
 import 'package:azkary/Features/quran/presentation/views/manager/quran_cubit/quran_cubit.dart';
 import 'package:azkary/core/app_router.dart';
+import 'package:azkary/core/bloc_observer.dart';
 import 'package:azkary/core/cubit/cubit/pray_times_cubit.dart';
+import 'package:azkary/core/services/cach_helper.dart';
 import 'package:azkary/core/services/prayertime_service.dart';
 import 'package:azkary/core/utilises/service_locator.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +12,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  CacheHelper.init();
+
   setupServiceLocator();
+  Bloc.observer = const AppBlocObserver();
 
   runApp(const MyApp());
 }
@@ -35,7 +41,6 @@ class MyApp extends StatelessWidget {
               child: MaterialApp.router(
                 routerConfig: AppRouter.router,
                 debugShowCheckedModeBanner: false,
-                title: 'Flutter Demo',
                 theme: ThemeData(
                   fontFamily: 'Aljazeera',
                   colorScheme:

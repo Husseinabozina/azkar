@@ -1,8 +1,5 @@
-import 'package:azkary/Features/Tasbeah/data/pray.dart';
 import 'package:azkary/core/cubit/cubit/pray_times_cubit.dart';
-import 'package:azkary/core/services/prayertime_service.dart';
 import 'package:azkary/core/utilises/app_colors.dart';
-import 'package:azkary/core/utilises/styles.dart';
 import 'package:azkary/core/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

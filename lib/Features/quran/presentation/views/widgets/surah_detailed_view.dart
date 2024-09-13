@@ -1,6 +1,8 @@
 import 'package:azkary/Features/quran/data/models/surah/surah.dart';
 import 'package:azkary/Features/quran/presentation/views/manager/quran_cubit/quran_cubit.dart';
 import 'package:azkary/core/app_router.dart';
+import 'package:azkary/core/services/cach_helper.dart';
+import 'package:azkary/core/utilises/app_colors.dart';
 import 'package:azkary/core/utilises/arabi_no_convert.dart';
 import 'package:azkary/core/utilises/arabic_sura_number.dart';
 import 'package:azkary/core/utilises/styles.dart';
@@ -20,15 +22,18 @@ class SurahDetailedView extends StatefulWidget {
 }
 
 class _SurahDetailedViewState extends State<SurahDetailedView> {
+  bool view = true;
+
   late final bloc;
 
   jumbToAyah() {
     QuranCubit quranCubit = BlocProvider.of<QuranCubit>(context);
     if (quranCubit.fabIsClicked) {
       quranCubit.itemScrollController.scrollTo(
-          index: quranCubit.ayahindex - 2,
-          duration: Duration(seconds: 2),
-          curve: Curves.ease);
+        alignment: 0.5,
+        index: CacheHelper.get(key: "ayah"),
+        duration: Duration(seconds: 2),
+      );
     }
     quranCubit.fabToFalse();
   }
@@ -43,8 +48,10 @@ class _SurahDetailedViewState extends State<SurahDetailedView> {
   Widget verse(String ayah, int index) {
     QuranCubit quranCubit = BlocProvider.of<QuranCubit>(context);
     return Container(
-      color:
-          index == quranCubit.ayahindex ? Colors.blue.withOpacity(0.4) : null,
+      color: index == CacheHelper.get(key: 'ayah') &&
+              (widget.surah.id! - 1 == CacheHelper.get(key: 'surah'))
+          ? Colors.blue.withOpacity(0.4)
+          : null,
       child: Column(
         children: [
           Row(
@@ -57,7 +64,7 @@ class _SurahDetailedViewState extends State<SurahDetailedView> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      ayah + (index + 1).toString().toArabicNumbers,
+                      ayah + (index).toString().toArabicNumbers,
                       textDirection: TextDirection.rtl,
                       style: Styles.quranFont40,
                     ),
@@ -78,6 +85,8 @@ class _SurahDetailedViewState extends State<SurahDetailedView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomViewAppBar(title: widget.surah.name!),
+      backgroundColor: AppColors.colorQuranBackground,
       body: BlocBuilder<QuranCubit, QuranState>(
         builder: (context, state) {
           return ScrollablePositionedList.builder(
@@ -86,7 +95,6 @@ class _SurahDetailedViewState extends State<SurahDetailedView> {
             itemBuilder: (BuildContext context, int index) {
               return Column(
                 children: [
-                  if (index == 0) CustomViewAppBar(title: widget.surah.name!),
                   (index != 0) ||
                           (widget.surah.id == 1) ||
                           (widget.surah.id == 8)
@@ -111,25 +119,36 @@ class _SurahDetailedViewState extends State<SurahDetailedView> {
                               PopupMenuItem(
                                 onTap: () {
                                   BlocProvider.of<QuranCubit>(context)
-                                      .saveBookMark(widget.surah.id, index + 2);
+                                      .saveBookMark(widget.surah.id, index + 1);
                                 },
                                 child: const Row(children: [
-                                  Icon(Icons.bookmark_add),
+                                  Icon(
+                                    Icons.bookmark_add,
+                                    color: Colors.white,
+                                  ),
                                   SizedBox(
                                     width: 10,
                                   ),
-                                  Text('Bookmark')
+                                  Text(
+                                    'فاصل',
+                                    style: TextStyle(color: Colors.white),
+                                  )
                                 ]),
                               ),
                               const PopupMenuItem(
                                   child: Row(
                                 children: [
                                   Icon(Icons.share,
-                                      color: Color.fromARGB(255, 56, 115, 59)),
+                                      color: Color.fromARGB(255, 66, 255, 76)),
                                   SizedBox(
                                     width: 10,
                                   ),
-                                  Text('Share')
+                                  Text(
+                                    'Share',
+                                    style: TextStyle(
+                                        color:
+                                            Color.fromARGB(255, 66, 255, 76)),
+                                  )
                                 ],
                               )),
                             ]),

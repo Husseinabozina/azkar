@@ -6,11 +6,6 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: HomeViewBody());
-    //  ListView.builder(
-    //     itemCount: azkarDataList.length,
-    //     itemBuilder: (context, index) => Container(
-    //           child: Text(azkarDataList[index]!),
-    //         )));
+    return const Scaffold(body: HomeViewBody());
   }
 }

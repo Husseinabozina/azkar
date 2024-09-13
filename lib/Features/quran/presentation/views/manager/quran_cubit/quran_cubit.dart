@@ -1,9 +1,8 @@
 import 'package:azkary/Features/quran/data/models/surah/surah.dart';
+import 'package:azkary/Features/quran/data/models/surah_tafseer.dart';
 import 'package:azkary/Features/quran/data/repos/quran_repo.dart';
-import 'package:azkary/core/helpers/shared_preferens/font_helper.dart';
+import 'package:azkary/core/services/cach_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 part 'quran_state.dart';
@@ -12,7 +11,8 @@ class QuranCubit extends Cubit<QuranState> {
   QuranCubit(this.quranRepo) : super(QuranInitial());
 
   QuranRepo quranRepo;
-  late var listSurahs;
+  List<Surah>? surahList;
+  List<SurahTafseer>? surahTafseer;
   bool fabIsClicked = false;
   int surahIndex = 0;
   int ayahindex = 0;
@@ -30,27 +30,43 @@ class QuranCubit extends Cubit<QuranState> {
     emit(ToggleFabButtonState());
   }
 
-  Future<List<Surah>> fethAllSurahs() async {
-    var result = await quranRepo.fetchAllSurahs();
-    listSurahs = result;
+  Future<void> fethAllSurahs() async {
+    emit(QuranInitial());
+    try {
+      await quranRepo.fetchAllSurahs().then((value) {
+        try {
+          surahList = value;
+          emit(QuranGetSuccess(surahsList: value));
+        } catch (e) {
+          emit(QuranGetFailure());
+        }
+      });
+    } catch (e) {
+      emit(QuranGetFailure());
+    }
+  }
 
-    emit(QuranGetSuccess(surahsList: result));
-    return result;
+  void getSurahTafseer(int surahId) async {
+    emit(QuranGetSurahTafseerLoading());
+    final result = await quranRepo.getSurahsTafseer(surahId);
+    result.when(success: (value) {
+      surahTafseer = value;
+      emit(QuranGetSurahTafseerSuccess());
+    }, failure: (error) {
+      emit(QuranGetSurahTafseerFailure(msg: error.toString()));
+    });
   }
 
   Future<void> saveBookMark(surah, ayah) async {
-    await PrefHelper().saveBookMark(surah, ayah).then((value) {
+    await CacheHelper.save(key: 'surah', value: surah - 1);
+    await CacheHelper.save(key: 'ayah', value: ayah).then((value) {
       emit(QuranSaveBookMarkSuccess());
-
-      print('saved surah is $surah saved ayah is $ayah');
     });
   }
 
   Future<void> getBookMark() async {
-    final prefs = await SharedPreferences.getInstance();
-    surahIndex = await prefs.getInt('surah') ?? 0;
-    ayahindex = await prefs.getInt('ayah') ?? 0;
-    print('Geted surah is $surahIndex Geted ayah is $ayahindex');
+    surahIndex = CacheHelper.get(key: 'surah') ?? 0;
+    ayahindex = CacheHelper.get(key: 'ayah') ?? 0;
     emit(QuranGetBookMarkSuccess());
   }
 }
