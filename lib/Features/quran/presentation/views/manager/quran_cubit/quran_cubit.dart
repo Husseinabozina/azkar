@@ -1,4 +1,5 @@
 import 'package:azkary/Features/quran/data/models/surah/surah.dart';
+import 'package:azkary/Features/quran/data/models/ayahAudio.dart';
 import 'package:azkary/Features/quran/data/models/surah_tafseer.dart';
 import 'package:azkary/Features/quran/data/repos/quran_repo.dart';
 import 'package:azkary/core/services/cach_helper.dart';
@@ -13,10 +14,12 @@ class QuranCubit extends Cubit<QuranState> {
   QuranRepo quranRepo;
   List<Surah>? surahList;
   List<SurahTafseer>? surahTafseer;
+  List<AyahAudio> surahAudios = [];
   bool fabIsClicked = false;
   int surahIndex = 0;
   int ayahindex = 0;
   final ItemScrollController itemScrollController = ItemScrollController();
+
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
 
@@ -46,7 +49,19 @@ class QuranCubit extends Cubit<QuranState> {
     }
   }
 
-  void getSurahTafseer(int surahId) async {
+  Future<void> getSurahAudio(int surahId) async {
+    emit(GetQuranSurahAudioLoading());
+    surahAudios.clear(); // Clear the previous Surah's audios
+    final result = await quranRepo.getSurahAudios(surahId);
+    result.when(success: (value) {
+      surahAudios = value;
+      emit(GetQuranSurahAudioSuccess());
+    }, failure: (error) {
+      emit(GetQuranSurahAudioFailure(msg: error.toString()));
+    });
+  }
+
+  Future<void> getSurahTafseer(int surahId) async {
     emit(QuranGetSurahTafseerLoading());
     final result = await quranRepo.getSurahsTafseer(surahId);
     result.when(success: (value) {

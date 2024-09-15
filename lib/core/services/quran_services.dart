@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:azkary/core/cosntant.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 
@@ -14,12 +15,25 @@ class QuranService {
     return data;
   }
 
- Future<Response<dynamic>> surahTafser(int surahId) async {
-    String url =
-        "https://quranenc.com/api/v1/translation/sura/arabic_moyassar/$surahId";
-    return dio.get(
-      url,
-    );
-    
+  Future<List<Map<String, dynamic>>> surahTafser(int surahId) async {
+    final surahName = surahNames[surahId];
+    if (surahName == null) {
+      throw Exception('Surah not found');
+    }
+    final String response =
+        await rootBundle.loadString('assets/json/$surahName.json');
+    final data = (await json.decode(response)["result"] as List<dynamic>)
+        .cast<Map<String, dynamic>>();
+    return data;
+  }
+
+  Future<List<Map<String, dynamic>>> getSurahAudios(int surahId) {
+    String apiUrl = 'https://api.alquran.cloud/v1/surah/$surahId/ar.alafasy';
+
+    return dio.get(apiUrl).then((response) {
+      final data = (response.data["data"]["ayahs"] as List<dynamic>)
+          .cast<Map<String, dynamic>>();
+      return data;
+    });
   }
 }

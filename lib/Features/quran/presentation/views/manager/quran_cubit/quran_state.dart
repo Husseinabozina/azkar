@@ -25,3 +25,12 @@ class QuranGetSurahTafseerFailure extends QuranState {
   final String? msg;
   QuranGetSurahTafseerFailure({this.msg});
 }
+
+class GetQuranSurahAudioSuccess extends QuranState {}
+
+class GetQuranSurahAudioLoading extends QuranState {}
+
+class GetQuranSurahAudioFailure extends QuranState {
+  final String? msg;
+  GetQuranSurahAudioFailure({this.msg});
+}

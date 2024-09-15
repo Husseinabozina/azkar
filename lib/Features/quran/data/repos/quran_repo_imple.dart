@@ -1,4 +1,5 @@
 import 'package:azkary/Features/quran/data/models/surah/surah.dart';
+import 'package:azkary/Features/quran/data/models/ayahAudio.dart';
 import 'package:azkary/Features/quran/data/models/surah_tafseer.dart';
 import 'package:azkary/Features/quran/data/repos/quran_repo.dart';
 import 'package:azkary/core/network/api/error_handling/api_result.dart';
@@ -30,12 +31,22 @@ class QuranRepoImpl implements QuranRepo {
   @override
   Future<ApiResult<List<SurahTafseer>>> getSurahsTafseer(int surahId) async {
     try {
-      final response = await quranService.surahTafser(surahId);
-      final List<Map<String, dynamic>> data =
-          (response.data['result'] as List<dynamic>)
-              .cast<Map<String, dynamic>>();
-      final result = data.map((e) => SurahTafseer.fromJson(e)).toList();
-      return ApiResult.success(result);
+      final data = await quranService.surahTafser(surahId);
+
+      final surahTafseer = data.map((e) => SurahTafseer.fromJson(e)).toList();
+      return ApiResult.success(surahTafseer);
+    } catch (error) {
+      return ApiResult.failure(ApiErrorHandler.handle(error));
+    }
+  }
+
+  @override
+  Future<ApiResult<List<AyahAudio>>> getSurahAudios(int surahId) async {
+    try {
+      final data = await quranService.getSurahAudios(surahId);
+      final surahAudios = data.map((e) => AyahAudio.fromJson(e)).toList();
+
+      return ApiResult.success(surahAudios);
     } catch (error) {
       return ApiResult.failure(ApiErrorHandler.handle(error));
     }

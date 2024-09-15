@@ -23,13 +23,6 @@ class _QuranViewState extends State<QuranView> {
     await quranCubit.fethAllSurahs();
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   getData();
-
-  //   super.didChangeDependencies();
-  // }
-
   @override
   Widget build(BuildContext context) {
     final quranCubit = BlocProvider.of<QuranCubit>(context);
